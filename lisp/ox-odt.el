@@ -2026,8 +2026,8 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 ;;;; Latex Fragment
 
 ;; (when latex-frag			; FIXME
-;; 	(setq href (propertize href :title "LaTeX Fragment"
-;; 				   :description latex-frag)))
+;;	(setq href (propertize href :title "LaTeX Fragment"
+;;				   :description latex-frag)))
 ;; handle verbatim
 ;; provide descriptions
 
@@ -3705,7 +3705,7 @@ contextual information."
       ((dvipng imagemagick)
        (unless (and (org-check-external-command "latex" "" t)
 		    (org-check-external-command
-		     (if (eq processing-type 'dvipng) "dvipng" "convert") "" t))
+		     (if (eq processing-type 'dvipng) org-create-formula-image-dvipng-command org-create-formula-image-convert-command) "" t))
 	 (message "LaTeX to PNG converter not available.")
 	 (setq processing-type 'verbatim)))
       (otherwise

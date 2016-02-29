@@ -51,10 +51,10 @@
 ;; Let's say you want to capture this BibTeX entry:
 ;;
 ;; @Article{dolev83,
-;;   author = 	 {Danny Dolev and Andrew C. Yao},
-;;   title = 	 {On the security of public-key protocols},
-;;   journal = 	 {IEEE Transaction on Information Theory},
-;;   year = 	 1983,
+;;   author =	 {Danny Dolev and Andrew C. Yao},
+;;   title =	 {On the security of public-key protocols},
+;;   journal =	 {IEEE Transaction on Information Theory},
+;;   year =	 1983,
 ;;   volume =	 2,
 ;;   number =	 29,
 ;;   pages =	 {198--208},
@@ -548,8 +548,8 @@ With optional argument OPTIONAL, also prompt for optional fields."
 (add-hook 'org-execute-file-search-functions 'org-execute-file-search-in-bibtex)
 
 
-;;; Bibtex <-> Org headline translation functions
-(defun org-bibtex (filename)
+;;; Bibtex <-> Org-mode headline translation functions
+(defun org-bibtex (filename &optional match)
   "Export each headline in the current file to a bibtex entry.
 Headlines are exported using `org-bibtex-headline'."
   (interactive
@@ -566,7 +566,8 @@ Headlines are exported using `org-bibtex-headline'."
                                (lambda ()
                                  (condition-case nil
                                      (org-bibtex-headline)
-                                   (error (throw 'bib (point)))))))))
+                                   (error (throw 'bib (point)))))
+			       match))))
              (with-temp-file filename
                (insert (mapconcat #'identity bibtex-entries "\n")))
              (message "Successfully exported %d BibTeX entries to %s"
@@ -678,7 +679,9 @@ Return the number of saved entries."
 	 (val (lambda (field) (cdr (assoc field entry))))
 	 (togtag (lambda (tag) (org-toggle-tag tag 'on))))
     (org-insert-heading)
-    (insert (funcall val :title))
+    (if (funcall val :url)
+	(insert (format "[[%s][%s]]" (funcall val :url) (funcall val :title)))
+      (insert (funcall val :title)))
     (org-bibtex-put "TITLE" (funcall val :title))
     (org-bibtex-put org-bibtex-type-property-name
 		    (downcase (funcall val :type)))

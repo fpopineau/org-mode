@@ -533,10 +533,10 @@ An entry can be toggled between COMMENT and normal with
 
 (defconst org-latex-regexps
   '(("begin" "^[ \t]*\\(\\\\begin{\\([a-zA-Z0-9\\*]+\\)[^\000]+?\\\\end{\\2}\\)" 1 t)
-    ;; ("$" "\\([ 	(]\\|^\\)\\(\\(\\([$]\\)\\([^ 	\r\n,.$].*?\\(\n.*?\\)\\{0,5\\}[^ 	\r\n,.$]\\)\\4\\)\\)\\([ 	.,?;:'\")]\\|$\\)" 2 nil)
+    ;; ("$" "\\([	(]\\|^\\)\\(\\(\\([$]\\)\\([^	\r\n,.$].*?\\(\n.*?\\)\\{0,5\\}[^	\r\n,.$]\\)\\4\\)\\)\\([	.,?;:'\")]\\|$\\)" 2 nil)
     ;; \000 in the following regex is needed for org-inside-LaTeX-fragment-p
-    ("$1" "\\([^$]\\|^\\)\\(\\$[^ 	\r\n,;.$]\\$\\)\\(\\s.\\|\\s-\\|\\s(\\|\\s)\\|\\s\"\\|\000\\|$\\)" 2 nil)
-    ("$"  "\\([^$]\\|^\\)\\(\\(\\$\\([^ 	\r\n,;.$][^$\n\r]*?\\(\n[^$\n\r]*?\\)\\{0,2\\}[^ 	\r\n,.$]\\)\\$\\)\\)\\(\\s.\\|\\s-\\|\\s(\\|\\s)\\|\\s\"\\|\000\\|$\\)" 2 nil)
+    ("$1" "\\([^$]\\|^\\)\\(\\$[^	\r\n,;.$]\\$\\)\\(\\s.\\|\\s-\\|\\s(\\|\\s)\\|\\s\"\\|\000\\|$\\)" 2 nil)
+    ("$"  "\\([^$]\\|^\\)\\(\\(\\$\\([^		\r\n,;.$][^$\n\r]*?\\(\n[^$\n\r]*?\\)\\{0,2\\}[^	\r\n,.$]\\)\\$\\)\\)\\(\\s.\\|\\s-\\|\\s(\\|\\s)\\|\\s\"\\|\000\\|$\\)" 2 nil)
     ("\\(" "\\\\([^\000]*?\\\\)" 0 nil)
     ("\\[" "\\\\\\[[^\000]*?\\\\\\]" 0 nil)
     ("$$" "\\$\\$[^\000]*?\\$\\$" 0 nil))
@@ -1086,7 +1086,7 @@ loading Org."
     ([(shift down)]		. [(meta n)])
     ([(shift left)]		. [(meta -)])
     ([(shift right)]		. [(meta +)])
-    ([(control shift right)] 	. [(meta shift +)])
+    ([(control shift right)]	. [(meta shift +)])
     ([(control shift left)]	. [(meta shift -)]))
   "Keys for which Org mode and other modes compete.
 This is an alist, cars are the default keys, second element specifies
@@ -13035,23 +13035,23 @@ statistics everywhere."
 	    (save-match-data
 	      (unless (outline-next-heading) (throw 'exit nil))
 	      (while (and (looking-at org-complex-heading-regexp)
-	    		  (> (setq l1 (length (match-string 1))) level))
-	    	(setq kwd (and (or recursive (= l1 ltoggle))
-	    		       (match-string 2)))
-	    	(if (or (eq org-provide-todo-statistics 'all-headlines)
+			  (> (setq l1 (length (match-string 1))) level))
+		(setq kwd (and (or recursive (= l1 ltoggle))
+			       (match-string 2)))
+		(if (or (eq org-provide-todo-statistics 'all-headlines)
 			(and (eq org-provide-todo-statistics t)
 			     (or (member kwd org-done-keywords)))
-	    		(and (listp org-provide-todo-statistics)
+			(and (listp org-provide-todo-statistics)
 			     (stringp (car org-provide-todo-statistics))
-	    		     (or (member kwd org-provide-todo-statistics)
+			     (or (member kwd org-provide-todo-statistics)
 				 (member kwd org-done-keywords)))
 			(and (listp org-provide-todo-statistics)
 			     (listp (car org-provide-todo-statistics))
 			     (or (member kwd (car org-provide-todo-statistics))
 				 (and (member kwd org-done-keywords)
 				      (member kwd (cadr org-provide-todo-statistics))))))
-	    	    (setq cnt-all (1+ cnt-all))
-	    	  (and (eq org-provide-todo-statistics t)
+		    (setq cnt-all (1+ cnt-all))
+		  (and (eq org-provide-todo-statistics t)
 		       kwd
 		       (setq cnt-all (1+ cnt-all))))
 		(when (or (and (member org-provide-todo-statistics '(t all-headlines))
@@ -13064,13 +13064,13 @@ statistics everywhere."
 			       (stringp (car org-provide-todo-statistics))
 			       (member kwd org-done-keywords)))
 		  (setq cnt-done (1+ cnt-done)))
-	    	(outline-next-heading)))
+		(outline-next-heading)))
 	    (setq new
-	    	  (if is-percent
+		  (if is-percent
 		      (format "[%d%%]" (floor (* 100.0 cnt-done)
 					      (max 1 cnt-all)))
-	    	    (format "[%d/%d]" cnt-done cnt-all))
-	    	  ndel (- (match-end 0) checkbox-beg))
+		    (format "[%d/%d]" cnt-done cnt-all))
+		  ndel (- (match-end 0) checkbox-beg))
 	    (goto-char checkbox-beg)
 	    (insert new)
 	    (delete-region (point) (+ (point) ndel))
@@ -14758,7 +14758,7 @@ When DOWNCASE is non-nil, expand downcased TAGS."
 		 (tag (match-string 2 return-match))
 		 (tag (if downcased (downcase tag) tag)))
 	    (unless (or (get-text-property 0 'grouptag (match-string 2 return-match))
-		        (member tag work-already-expanded))
+			(member tag work-already-expanded))
 	      (setq tags-in-group (assoc tag taggroups))
 	      (push tag work-already-expanded)
 	      ;; Recursively expand each tag in the group, if the tag hasn't
@@ -15374,11 +15374,11 @@ Returns the new tags string, or nil to not change the current settings."
 	    (setq c (or c2 char)))
 	  (when ingroup (push tg (car groups)))
 	  (setq tg (org-add-props tg nil 'face
-	  			  (cond
-	  			   ((not (assoc tg table))
-	  			    (org-get-todo-face tg))
-	  			   ((member tg current) c-face)
-	  			   ((member tg inherited) i-face))))
+				  (cond
+				   ((not (assoc tg table))
+				    (org-get-todo-face tg))
+				   ((member tg current) c-face)
+				   ((member tg inherited) i-face))))
 	  (when (equal (caar tbl) :grouptags)
 	    (org-add-props tg nil 'face 'org-tag-group))
 	  (when (and (zerop cnt) (not ingroup) (not intaggroup)) (insert " "))
@@ -19413,6 +19413,46 @@ inspection."
 						'paragraph 'character)))
       ;; Failed conversion.  Return the LaTeX fragment verbatim
       latex-frag)))
+
+(defcustom org-create-formula-image-latex-command "latex"
+  "LaTeX command to run to convert LaTeX fragments to images."
+  :type 'string
+  :group 'org-export-latex)
+
+(defcustom org-create-formula-image-dvipng-command "dvipng"
+  "Dvipng command to run to convert LaTeX fragments to images."
+  :type 'string
+  :group 'org-export-latex)
+
+(defcustom org-create-formula-image-convert-command "convert"
+  "ImageMagick convert command to run to convert LaTeX fragments to images."
+  :type 'string
+  :group 'org-export-latex)
+
+(defun org-create-formula-image (string tofile options buffer &optional type)
+  "Create an image from LaTeX source using dvipng or convert.
+This function calls either `org-create-formula-image-with-dvipng'
+or `org-create-formula-image-with-imagemagick' depending on the
+value of `org-latex-create-formula-image-program' or on the value
+of the optional TYPE variable.
+
+Note: ultimately these two function should be combined as they
+share a good deal of logic."
+  (org-check-external-command
+   org-create-formula-image-latex-command "needed to convert LaTeX fragments to images")
+  (funcall
+   (cl-case (or type org-latex-create-formula-image-program)
+     (dvipng
+      (org-check-external-command
+       org-create-formula-image-dvipng-command "needed to convert LaTeX fragments to images")
+      #'org-create-formula-image-with-dvipng)
+     (imagemagick
+      (org-check-external-command
+       org-create-formula-image-convert-command "you need to install imagemagick")
+      #'org-create-formula-image-with-imagemagick)
+     (t (error
+         "Invalid value of `org-latex-create-formula-image-program'")))
+   string tofile options buffer))
 
 (declare-function org-export-get-backend "ox" (name))
 (declare-function org-export--get-global-options "ox" (&optional backend))

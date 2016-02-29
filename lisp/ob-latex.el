@@ -207,7 +207,7 @@ This function is called by `org-babel-execute-src-block'."
 
 (defun org-babel-latex-convert-pdf (pdffile out-file im-in-options im-out-options)
   "Generate a file from a pdf file using imagemagick."
-  (let ((cmd (concat "convert " im-in-options " " pdffile " "
+  (let ((cmd (concat org-create-formula-image-convert-command " " im-in-options " " pdffile " "
 		     im-out-options " " out-file)))
     (message "Converting pdffile file %s..." cmd)
     (shell-command cmd)))
