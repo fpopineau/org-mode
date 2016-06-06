@@ -19429,31 +19429,6 @@ inspection."
   :type 'string
   :group 'org-export-latex)
 
-(defun org-create-formula-image (string tofile options buffer &optional type)
-  "Create an image from LaTeX source using dvipng or convert.
-This function calls either `org-create-formula-image-with-dvipng'
-or `org-create-formula-image-with-imagemagick' depending on the
-value of `org-latex-create-formula-image-program' or on the value
-of the optional TYPE variable.
-
-Note: ultimately these two function should be combined as they
-share a good deal of logic."
-  (org-check-external-command
-   org-create-formula-image-latex-command "needed to convert LaTeX fragments to images")
-  (funcall
-   (cl-case (or type org-latex-create-formula-image-program)
-     (dvipng
-      (org-check-external-command
-       org-create-formula-image-dvipng-command "needed to convert LaTeX fragments to images")
-      #'org-create-formula-image-with-dvipng)
-     (imagemagick
-      (org-check-external-command
-       org-create-formula-image-convert-command "you need to install imagemagick")
-      #'org-create-formula-image-with-imagemagick)
-     (t (error
-         "Invalid value of `org-latex-create-formula-image-program'")))
-   string tofile options buffer))
-
 (declare-function org-export-get-backend "ox" (name))
 (declare-function org-export--get-global-options "ox" (&optional backend))
 (declare-function org-export--get-inbuffer-options "ox" (&optional backend))
