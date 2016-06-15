@@ -962,6 +962,13 @@ mode."
   :type 'boolean)
 
 
+(defcustom org-export-user-broken-link-handler nil
+  "Handler for broken links."
+  :group 'org-export-general
+  :version "24.4"
+  :package-version '(Org . "8.3")
+  :type 'function)
+
 
 ;;; Defining Back-ends
 ;;
@@ -1911,6 +1918,8 @@ Return a string."
 		  (`nil (user-error "Unable to resolve link: %S" (nth 1 err)))
 		  (`mark (org-export-data
 			  (format "[BROKEN LINK: %s]" (nth 1 err)) info))
+		  (`user (and org-export-user-broken-link-handler
+			      (org-export-data (funcall org-export-user-broken-link-handler data info) info)))
 		  (_ nil))))))
 	(let* ((type (org-element-type data))
 	       (parent (org-export-get-parent data))
