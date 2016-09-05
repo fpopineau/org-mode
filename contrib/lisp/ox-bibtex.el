@@ -192,7 +192,7 @@ Return new parse tree."
 		temp-file
 		out-file)
 	    ;; Test if filename is given with .bib-extension and strip
-    	    ;; it off. Filenames with another extensions will be
+	    ;; it off. Filenames with another extensions will be
 	    ;; untouched and will finally rise an error in bibtex2html.
 	    (setq file (if (equal (file-name-extension file) "bib")
 			   (file-name-sans-extension file) file))
@@ -217,6 +217,7 @@ Return new parse tree."
 				 (append (plist-get arguments :options)
 					 (list "-citefile" temp-file))))))
 	    ;; Call "bibtex2html" on specified file.
+	    (setenv "openout_any" "a")
 	    (unless (eq 0 (apply
 			   'call-process
 			   (append '("bibtex2html" nil nil nil)
@@ -226,8 +227,9 @@ Return new parse tree."
 					   (org-bibtex-get-style keyword))))
 				     (and style (list "--style" style)))
 				   (plist-get arguments :options)
-				   (list (concat file ".bib")))))
+				   (list (expand-file-name (concat file ".bib"))))))
 	      (error "Executing bibtex2html failed"))
+	    (setenv "openout_any")
 	    (and temp-file (delete-file temp-file))
 	    ;; Open produced HTML file, and collect Bibtex key names
 	    (with-temp-buffer
