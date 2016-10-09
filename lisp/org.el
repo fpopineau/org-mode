@@ -4067,6 +4067,21 @@ When using LaTeXML set this option to
 	  (const :tag "None" nil)
 	  (string :tag "\nShell command")))
 
+(defcustom org-create-formula-image-latex-command "latex"
+  "LaTeX command to run to convert LaTeX fragments to images."
+  :type 'string
+  :group 'org-export-latex)
+
+(defcustom org-create-formula-image-dvipng-command "dvipng"
+  "Dvipng command to run to convert LaTeX fragments to images."
+  :type 'string
+  :group 'org-export-latex)
+
+(defcustom org-create-formula-image-convert-command "convert"
+  "ImageMagick convert command to run to convert LaTeX fragments to images."
+  :type 'string
+  :group 'org-export-latex)
+
 (defcustom org-preview-latex-default-process 'dvipng
   "The default process to convert LaTeX fragments to image files.
 All available processes and theirs documents can be found in
@@ -4077,7 +4092,7 @@ All available processes and theirs documents can be found in
   :type 'symbol)
 
 (defcustom org-preview-latex-process-alist
-  '((dvipng
+  `((dvipng
      :programs ("latex" "dvipng" "gs")
      :description "dvi > png"
      :message "you need to install the programs: latex, dvipng and ghostscript."
@@ -4107,7 +4122,7 @@ All available processes and theirs documents can be found in
      :image-size-adjust (1.0 . 1.0)
      :latex-compiler ("pdflatex -interaction nonstopmode -output-directory %o %f")
      :image-converter
-     ("convert -density %D -trim -antialias %f -quality 100 %b.png")))
+     (,(concat  org-create-formula-image-convert-command  " -density %D -trim -antialias %f -quality 100 %b.png"))))
   "Definitions of external processes for LaTeX previewing.
 Org mode can use some external commands to generate TeX snippet's images for
 previewing or inserting into HTML files, e.g., \"dvipng\".  This variable tells
@@ -19413,21 +19428,6 @@ inspection."
 						'paragraph 'character)))
       ;; Failed conversion.  Return the LaTeX fragment verbatim
       latex-frag)))
-
-(defcustom org-create-formula-image-latex-command "latex"
-  "LaTeX command to run to convert LaTeX fragments to images."
-  :type 'string
-  :group 'org-export-latex)
-
-(defcustom org-create-formula-image-dvipng-command "dvipng"
-  "Dvipng command to run to convert LaTeX fragments to images."
-  :type 'string
-  :group 'org-export-latex)
-
-(defcustom org-create-formula-image-convert-command "convert"
-  "ImageMagick convert command to run to convert LaTeX fragments to images."
-  :type 'string
-  :group 'org-export-latex)
 
 (declare-function org-export-get-backend "ox" (name))
 (declare-function org-export--get-global-options "ox" (&optional backend))
