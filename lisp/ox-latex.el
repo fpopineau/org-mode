@@ -1355,7 +1355,7 @@ Return the new header."
     ;; If no language is set or Babel package is not loaded, return
     ;; HEADER as-is.
     (if (or (not (stringp language-code))
-	    (not (string-match "\\\\usepackage\\[\\(.*\\)\\]{babel}" header)))
+	    (not (string-match "\\\\usepackage\\[\\([^\[\]{}]*\\)\\]{babel}" header)))
 	header
       (let ((options (save-match-data
 		       (org-split-string (match-string 1 header) ",[ \t]*")))
