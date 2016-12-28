@@ -10,16 +10,16 @@
 *.cps
 *.diff
 *.dvi
-*.elc
+# *.elc
 *.fn
 *.fns
 *.html
-*.info
+# *.info
 *.ky
 *.kys
 *.log
 *.patch
-*.pdf
+# *.pdf
 *.pg
 *.pgs
 *.ps
@@ -29,7 +29,7 @@
 *.vrs
 orgcard_letter.tex
 orgcard.txt
-org
+# org
 org-loaddefs.el
 org-version.el
 doc/org-version.inc
